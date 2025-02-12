@@ -16,74 +16,6 @@
             list.appendChild(listItem);
         }
     </script>
-    <script>
-        class Muscle {
-            constructor(trainingLevel, centerXOffset, yPosition, isFront, isBack) {
-                this.trainingLevel = trainingLevel;
-                this.centerXOffset = centerXOffset;
-                this.yPosition = yPosition;
-                this.isFront = isFront;
-                this.isBack = isBack;
-            }
-            
-            draw(ctx, centerX) {
-                throw new Error("draw must be implemented by subclasses");
-            }
-        }
-        
-        class Biceps extends Muscle {
-            draw(ctx, centerX) {
-                ctx.fillStyle = "red";
-                ctx.beginPath();
-                ctx.ellipse(centerX - this.centerXOffset, this.yPosition, this.trainingLevel * 5, this.trainingLevel * 8, 0, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.beginPath();
-                ctx.ellipse(centerX + this.centerXOffset, this.yPosition, this.trainingLevel * 5, this.trainingLevel * 8, 0, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-        
-        const muscleClasses = ['Triceps', 'Forearms', 'Shoulders', 'Abs', 'Chest', 'Lats', 'Traps', 'Quads', 'Hamstrings', 'Calves'];
-        muscleClasses.forEach(muscle => {
-            class DynamicMuscle extends Muscle {
-                draw(ctx, centerX) {
-                    ctx.fillStyle = "blue";
-                    ctx.beginPath();
-                    ctx.ellipse(centerX - this.centerXOffset, this.yPosition, this.trainingLevel * 5, this.trainingLevel * 8, 0, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.beginPath();
-                    ctx.ellipse(centerX + this.centerXOffset, this.yPosition, this.trainingLevel * 5, this.trainingLevel * 8, 0, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-            }
-            window[muscle] = DynamicMuscle;
-        });
-        
-        function drawCharacter() {
-            const canvas = document.getElementById("simulationCanvas");
-            const ctx = canvas.getContext("2d");
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            const centerX = canvas.width / 2;
-            const muscles = muscleClasses.map(muscle => {
-                const level = document.getElementById(muscle.toLowerCase() + "Level").value || 3;
-                return new window[muscle](level, 50, 100 + muscleClasses.indexOf(muscle) * 20, true, false);
-            });
-            
-            muscles.forEach(muscle => {
-                muscle.draw(ctx, centerX);
-            });
-        }
-        
-        document.addEventListener("DOMContentLoaded", function () {
-            const muscleInputsDiv = document.getElementById("muscleInputs");
-            let inputHTML = "<h3>Set Muscle Training Levels</h3>";
-            muscleClasses.forEach(muscle => {
-                inputHTML += `<label>${muscle}: <input type="number" id="${muscle.toLowerCase()}Level" value="3"></label><br>`;
-            });
-            muscleInputsDiv.innerHTML = inputHTML;
-        });
-    </script>
 </head>
 <body>
     <header>
@@ -95,6 +27,7 @@
                 <li><a href="#contact">Contact</a></li>
                 <li><a href="login.html">Login</a></li>
                 <li><a href="signup.html">Sign Up</a></li>
+                <li><a href="simulation.html">Simulation</a></li>
             </ul>
         </nav>
     </header>
@@ -134,14 +67,6 @@
             </select>
             <button type="submit">Add to Schedule</button>
         </form>
-    </section>
-    
-    <section id="simulation">
-        <h2>Avatar Simulation</h2>
-        <canvas id="simulationCanvas" width="400" height="400" style="border:1px solid black;"></canvas>
-        <br>
-        <button onclick="drawCharacter()">Draw Character</button>
-        <div id="muscleInputs"></div>
     </section>
 </body>
 </html>

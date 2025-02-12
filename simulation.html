@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Scheduling Web App</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        function addExercise() {
+            var select = document.getElementById("exercise");
+            var selectedExercise = select.options[select.selectedIndex].text;
+            
+            var list = document.getElementById("exercise-list");
+            var listItem = document.createElement("li");
+            listItem.textContent = selectedExercise;
+            list.appendChild(listItem);
+        }
+    </script>
+    <script>
+        class Muscle {
+            constructor(trainingLevel, centerXOffset, yPosition, isFront, isBack) {
+                this.trainingLevel = trainingLevel;
+                this.centerXOffset = centerXOffset;
+                this.yPosition = yPosition;
+                this.isFront = isFront;
+                this.isBack = isBack;
+            }
+            
+            draw(ctx, centerX) {
+                throw new Error("draw must be implemented by subclasses");
+            }
+        }
+        
+        class Biceps extends Muscle {
+            draw(ctx, centerX) {
+                if (this.isFront) {
+                    ctx.fillStyle = "red";
+                    ctx.beginPath();
+                    ctx.ellipse(centerX - this.centerXOffset, this.yPosition, this.trainingLevel * 5, this.trainingLevel * 8, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.ellipse(centerX + this.centerXOffset, this.yPosition, this.trainingLevel * 5, this.trainingLevel * 8, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }
+        
+        const muscleClasses = ['Triceps', 'Forearms', 'Shoulders', 'Abs', 'Chest', 'Lats', 'Traps', 'Quads', 'Hamstrings', 'Calves'];
+        muscleClasses.forEach(muscle => {
+            class DynamicMuscle extends Muscle {
+                draw(ctx, centerX) {
+                    if ((this.isBack && muscle !== 'Abs' && muscle !== 'Chest') || this.isFront) {
+                        ctx.fillStyle = "blue";
+                        ctx.beginPath();
+                        ctx.ellipse(centerX - this.centerXOffset, this.yPosition, this.trainingLevel * 5, this.trainingLevel * 8, 0, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.beginPath();
+                        ctx.ellipse(centerX + this.centerXOffset, this.yPosition, this.trainingLevel * 5, this.trainingLevel * 8, 0, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            }
+            window[muscle] = DynamicMuscle;
+        });
+        
+        function drawCharacter() {
+            const canvas = document.getElementById("simulationCanvas");
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const centerX = canvas.width / 2;
+            const muscles = muscleClasses.map(muscle => {
+                const level = document.getElementById(muscle.toLowerCase() + "Level").value || 3;
+                return new window[muscle](level, 50, 100 + muscleClasses.indexOf(muscle) * 20, true, false);
+            });
+            
+            muscles.forEach(muscle => {
+                if (muscle.isFront) muscle.draw(ctx, centerX);
+            });
+        }
+
+        function drawCharacterBack() {
+            const canvas = document.getElementById("simulationCanvasBack");
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const centerX = canvas.width / 2;
+            const muscles = muscleClasses.map(muscle => {
+                const level = document.getElementById(muscle.toLowerCase() + "Level").value || 3;
+                return new window[muscle](level, 50, 100 + muscleClasses.indexOf(muscle) * 20, false, true);
+            });
+            
+            muscles.forEach(muscle => {
+                if (muscle.isBack) muscle.draw(ctx, centerX);
+            });
+        }
+        
+        document.addEventListener("DOMContentLoaded", function () {
+            const muscleInputsDiv = document.getElementById("muscleInputs");
+            let inputHTML = "<h3>Set Muscle Training Levels</h3>";
+            muscleClasses.forEach(muscle => {
+                inputHTML += `<label>${muscle}: <input type="number" id="${muscle.toLowerCase()}Level" value="3"></label>`;
+            });
+            muscleInputsDiv.innerHTML = inputHTML;
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Gym Scheduling Web App</h1>
+    </header>
+    
+    <section style="display: flex; justify-content: center; gap: 20px;">
+        <div>
+            <h2>Avatar Simulation Front</h2>
+            <canvas id="simulationCanvas" width="400" height="400" style="border:1px solid black;"></canvas>
+            <br>
+            <button onclick="drawCharacter()">Draw Character</button>
+        </div>
+        <div>
+            <h2>Avatar Simulation Back</h2>
+            <canvas id="simulationCanvasBack" width="400" height="400" style="border:1px solid black;"></canvas>
+            <br>
+            <button onclick="drawCharacterBack()">Draw Character</button>
+        </div>
+    </section>
+
+    <section id="muscleInputs"></section>
+</body>
+</html>
