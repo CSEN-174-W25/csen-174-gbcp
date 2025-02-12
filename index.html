@@ -6,16 +6,34 @@
     <title>Gym Scheduling Web App</title>
     <link rel="stylesheet" href="styles.css">
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelector("form").addEventListener("submit", function (event) {
+                event.preventDefault();
+                addExercise();
+            });
+        });
+    
         function addExercise() {
             var select = document.getElementById("exercise");
             var selectedExercise = select.options[select.selectedIndex].text;
-            
+    
+            // Find or create the exercise list
             var list = document.getElementById("exercise-list");
+            if (!list) {
+                list = document.createElement("ul");
+                list.id = "exercise-list";
+                document.getElementById("exercise-selector").appendChild(list);
+            }
+    
+            // Create a new list item
             var listItem = document.createElement("li");
             listItem.textContent = selectedExercise;
+    
+            // Append the item to the list
             list.appendChild(listItem);
         }
     </script>
+    
 </head>
 <body>
     <header>
