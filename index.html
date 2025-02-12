@@ -16,6 +16,74 @@
             list.appendChild(listItem);
         }
     </script>
+    <script>
+        class Muscle {
+            constructor(trainingLevel, centerXOffset, yPosition, isFront, isBack) {
+                this.trainingLevel = trainingLevel;
+                this.centerXOffset = centerXOffset;
+                this.yPosition = yPosition;
+                this.isFront = isFront;
+                this.isBack = isBack;
+            }
+            
+            draw(ctx, centerX) {
+                throw new Error("draw must be implemented by subclasses");
+            }
+        }
+        
+        class Biceps extends Muscle {
+            draw(ctx, centerX) {
+                ctx.fillStyle = "red";
+                ctx.beginPath();
+                ctx.ellipse(centerX - this.centerXOffset, this.yPosition, this.trainingLevel * 5, this.trainingLevel * 8, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.ellipse(centerX + this.centerXOffset, this.yPosition, this.trainingLevel * 5, this.trainingLevel * 8, 0, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        const muscleClasses = ['Triceps', 'Forearms', 'Shoulders', 'Abs', 'Chest', 'Lats', 'Traps', 'Quads', 'Hamstrings', 'Calves'];
+        muscleClasses.forEach(muscle => {
+            class DynamicMuscle extends Muscle {
+                draw(ctx, centerX) {
+                    ctx.fillStyle = "blue";
+                    ctx.beginPath();
+                    ctx.ellipse(centerX - this.centerXOffset, this.yPosition, this.trainingLevel * 5, this.trainingLevel * 8, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.ellipse(centerX + this.centerXOffset, this.yPosition, this.trainingLevel * 5, this.trainingLevel * 8, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+            window[muscle] = DynamicMuscle;
+        });
+        
+        function drawCharacter() {
+            const canvas = document.getElementById("simulationCanvas");
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const centerX = canvas.width / 2;
+            const muscles = muscleClasses.map(muscle => {
+                const level = document.getElementById(muscle.toLowerCase() + "Level").value || 3;
+                return new window[muscle](level, 50, 100 + muscleClasses.indexOf(muscle) * 20, true, false);
+            });
+            
+            muscles.forEach(muscle => {
+                muscle.draw(ctx, centerX);
+            });
+        }
+        
+        document.addEventListener("DOMContentLoaded", function () {
+            const muscleInputsDiv = document.getElementById("muscleInputs");
+            let inputHTML = "<h3>Set Muscle Training Levels</h3>";
+            muscleClasses.forEach(muscle => {
+                inputHTML += `<label>${muscle}: <input type="number" id="${muscle.toLowerCase()}Level" value="3"></label><br>`;
+            });
+            muscleInputsDiv.innerHTML = inputHTML;
+        });
+    </script>
 </head>
 <body>
     <header>
@@ -42,7 +110,6 @@
         <iframe src="https://calendar.google.com/calendar/embed?src=yourcalendarid&ctz=yourtimezone" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
     </section>
 
-    
     <section id="exercise-selector">
         <h2>Add Exercises to Your Schedule</h2>
         <form onsubmit="event.preventDefault(); addExercise();">
@@ -69,21 +136,12 @@
         </form>
     </section>
     
-    <section id="exercise-schedule">
-        <h2>Your Workout Schedule</h2>
-        <ul id="exercise-list"></ul>
+    <section id="simulation">
+        <h2>Avatar Simulation</h2>
+        <canvas id="simulationCanvas" width="400" height="400" style="border:1px solid black;"></canvas>
+        <br>
+        <button onclick="drawCharacter()">Draw Character</button>
+        <div id="muscleInputs"></div>
     </section>
-    
-    <section id="about">
-        <h2>About This App</h2>
-        <p>In the world of weightlifting, it is important to hit every muscle group on a regular basis in order to maintain a balanced physique. Oftentimes it can be difficult to keep track of the exercises that need to be completed in a week’s schedule to maintain that balance and track progress. It can be hard to remember what was done on any given day and what muscles still need to be worked that week. 
-            We plan to solve this issue by creating a web app that tracks and plans your week's workout and gamifies it by adding an avatar whose physice is dependent on what the week's schedule is. The game aspect will make it fun and easy to tell what needs more work, while the planning part will make it easy to find the correct exercises to maximize muscle growth for a given muscle group. The expected use case is users who want to balance their schedule without serious commitments. 
-            The game part of the app would involve simulation and a fun game where the avatar can have different looks depending on the schedule you input for the week. As the week goes on, you can indicate which exercises and workouts you completed, and for any you missed you must provide a written excuse as to why you missed it, for which the avatar will jokingly comment on. This will encourage your weightlifting journey in a fun way.
-            
-            Between the game aspect and the easy to use UI with built in exercises it sets it apart from other fitness apps by making it easy and funny. We hope to make this app easy to use for people with any amount of experience with weightlifting at the gym. This app will hopefully be social and easily organizable. 
-            </p>
-    </section>
-    
-    
 </body>
 </html>
