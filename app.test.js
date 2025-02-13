@@ -11,7 +11,7 @@ describe('Muscle Class Tests', () => {
 
   test('Test 1: set values to negative', () => {
     muscle.setValue(-5);
-    expect(muscle.value).toBe(-5);
+    expect(muscle.value).toThrow("Invalid value");
   });
 
   test('Test 2: set value to between 1-5', () => {
@@ -21,17 +21,17 @@ describe('Muscle Class Tests', () => {
 
   test('Test 3: set value to over 5', () => {
     muscle.setValue(10);
-    expect(muscle.value).toBe(10);
+    expect(muscle.value).toThrow("Invalid value");
   });
 
   test('Test 4: set front to true', () => {
     muscle.setFront(true);
-    expect(muscle.front).toBe(true);
+    expect(muscle.isFront).toBe(true);
   });
 
   test('Test 5: set back to true', () => {
     muscle.setBack(true);
-    expect(muscle.back).toBe(true);
+    expect(muscle.isBack).toBe(true);
   });
 });
 
@@ -46,27 +46,27 @@ describe('Draw Muscle Class Tests', () => {
 
   test('Test 1: nothing in back', () => {
     muscle.setBack(false);
-    expect(drawMuscle.draw()).toBe('Drawing muscle');
+    expect(drawMuscle.draw()).toBe('Nothing to Draw');
   });
 
   test('Test 2: nothing in front', () => {
     muscle.setFront(false);
-    expect(drawMuscle.draw()).toBe('Drawing muscle');
+    expect(drawMuscle.draw()).toBe('Nothing to Draw');
   });
 
   test('Test 3: negative position', () => {
     drawMuscle.position.x = -1;
-    expect(drawMuscle.draw()).toBe('Negative position');
+    expect(drawMuscle.draw()).toThrow("Invalid value");
   });
 
   test('Test 4: y pos negative', () => {
     drawMuscle.position.y = -1;
-    expect(drawMuscle.draw()).toBe('Negative position');
+    expect(drawMuscle.draw()).toThrow("Invalid value");
   });
 
   test('Test 5: test standard draw button', () => {
     muscle.setBack(true);
-    expect(drawMuscle.draw()).toBe('Nothing in back');
+    expect(drawMuscle.draw()).toBe('Drawing Muscle');
   });
 });
 
@@ -90,6 +90,7 @@ describe('Schedule Class Tests', () => {
   });
 
   test('Test 3: Clear Schedule while empty', () => {
+    schedule.clearSchedule();
     schedule.clearSchedule();
     expect(schedule.schedule.length).toBe(0);
   });

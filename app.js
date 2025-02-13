@@ -2,8 +2,8 @@
 class Muscle {
     constructor() {
         this.value = 0;
-        this.front = false;
-        this.back = false;
+        this.isFront = false;
+        this.isBack = false;
     }
 
     setValue(value) {
@@ -17,11 +17,11 @@ class Muscle {
     }
 
     setFront(value) {
-        this.front = value;
+        this.isFront = value;
     }
 
     setBack(value) {
-        this.back = value;
+        this.isBack = value;
     }
 }
 
