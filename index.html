@@ -9,31 +9,46 @@
         document.addEventListener("DOMContentLoaded", function () {
             document.querySelector("form").addEventListener("submit", function (event) {
                 event.preventDefault();
-                //addExercise();
+                addExercise();
+            });
+
+            document.getElementById("clear-schedule").addEventListener("click", function () {
+                clearSchedule();
             });
         });
-    
+
         function addExercise() {
             var select = document.getElementById("exercise");
             var selectedExercise = select.options[select.selectedIndex].text;
-    
-            // Find or create the exercise list
+
             var list = document.getElementById("exercise-list");
             if (!list) {
                 list = document.createElement("ul");
                 list.id = "exercise-list";
                 document.getElementById("exercise-selector").appendChild(list);
             }
-    
-            // Create a new list item
+
             var listItem = document.createElement("li");
-            listItem.textContent = selectedExercise;
-    
-            // Append the item to the list
+            listItem.textContent = selectedExercise + " ";
+
+            // Add remove button
+            var removeButton = document.createElement("button");
+            removeButton.textContent = "Remove";
+            removeButton.onclick = function () {
+                listItem.remove();
+            };
+
+            listItem.appendChild(removeButton);
             list.appendChild(listItem);
         }
+
+        function clearSchedule() {
+            var list = document.getElementById("exercise-list");
+            if (list) {
+                list.innerHTML = "";
+            }
+        }
     </script>
-    
 </head>
 <body>
     <header>
@@ -49,13 +64,13 @@
             </ul>
         </nav>
     </header>
-    
+
     <section id="home">
         <h2>Welcome to Your Gym Planner!</h2>
         <p>Track and plan your weekly workouts while having fun with your avatar!</p>
         <a href="signup.html" class="cta-button">Get Started</a>
     </section>
-    
+
     <section id="calendar">
         <h2>Workout Calendar</h2>
         <iframe src="https://calendar.google.com/calendar/embed?src=yourcalendarid&ctz=yourtimezone" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
@@ -63,7 +78,7 @@
 
     <section id="exercise-selector">
         <h2>Add Exercises to Your Schedule</h2>
-        <form onsubmit="event.preventDefault(); addExercise();">
+        <form>
             <label for="exercise">Choose an exercise:</label>
             <select id="exercise" name="exercise">
                 <option value="bench_press">Bench Press</option>
@@ -85,6 +100,8 @@
             </select>
             <button type="submit">Add to Schedule</button>
         </form>
+        <button id="clear-schedule">Clear Schedule</button>
+        <ul id="exercise-list"></ul>
     </section>
 </body>
 </html>

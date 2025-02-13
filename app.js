@@ -8,11 +8,11 @@ class Muscle {
 
     setValue(value) {
         if (value < 0) {
-            this.value = value;
+            throw new Error('Invalid value');
         } else if (value >= 1 && value <= 5) {
             this.value = value;
         } else if (value > 5) {
-            this.value = value;
+            throw new Error('Invalid value');
         }
     }
 
@@ -34,15 +34,15 @@ class DrawMuscle {
 
     draw() {
         if (this.muscle.back) {
-            return 'Nothing in back';
+            return 'Drawing muscle';
         }
         if (this.muscle.front) {
-            return 'Nothing in front';
+            return 'Drawing muscle';
         }
         if (this.position.x < 0 || this.position.y < 0) {
-            return 'Negative position';
+            throw new Error('Invalid value');
         }
-        return 'Drawing muscle';
+        return 'Nothing to Draw';
     }
 }
 
