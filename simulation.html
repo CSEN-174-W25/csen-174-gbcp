@@ -6,17 +6,7 @@
     <title>Gym Scheduling Web App</title>
     <link rel="stylesheet" href="styles.css">
     <script>
-        function addExercise() {
-            var select = document.getElementById("exercise");
-            var selectedExercise = select.options[select.selectedIndex].text;
-            
-            var list = document.getElementById("exercise-list");
-            var listItem = document.createElement("li");
-            listItem.textContent = selectedExercise;
-            list.appendChild(listItem);
-        }
-    </script>
-    <script>
+        // Muscle Class - Base class
         class Muscle {
             constructor(trainingLevel, centerXOffset, yPosition, isFront, isBack) {
                 this.trainingLevel = trainingLevel;
@@ -25,12 +15,13 @@
                 this.isFront = isFront;
                 this.isBack = isBack;
             }
-            
+
             draw(ctx, centerX) {
                 throw new Error("draw must be implemented by subclasses");
             }
         }
-        
+
+        // Biceps Class - Subclass of Muscle
         class Biceps extends Muscle {
             draw(ctx, centerX) {
                 if (this.isFront) {
@@ -44,7 +35,8 @@
                 }
             }
         }
-        
+
+        // Dynamically create classes for each muscle
         const muscleClasses = ['Triceps', 'Forearms', 'Shoulders', 'Abs', 'Chest', 'Lats', 'Traps', 'Quads', 'Hamstrings', 'Calves'];
         muscleClasses.forEach(muscle => {
             class DynamicMuscle extends Muscle {
@@ -62,69 +54,98 @@
             }
             window[muscle] = DynamicMuscle;
         });
-        
+
+        // Function to draw the character on the front canvas
         function drawCharacter() {
             const canvas = document.getElementById("simulationCanvas");
             const ctx = canvas.getContext("2d");
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
+
             const centerX = canvas.width / 2;
             const muscles = muscleClasses.map(muscle => {
                 const level = document.getElementById(muscle.toLowerCase() + "Level").value || 3;
                 return new window[muscle](level, 50, 100 + muscleClasses.indexOf(muscle) * 20, true, false);
             });
-            
+
             muscles.forEach(muscle => {
                 if (muscle.isFront) muscle.draw(ctx, centerX);
             });
         }
 
+        // Function to draw the character on the back canvas
         function drawCharacterBack() {
             const canvas = document.getElementById("simulationCanvasBack");
             const ctx = canvas.getContext("2d");
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
+
             const centerX = canvas.width / 2;
             const muscles = muscleClasses.map(muscle => {
                 const level = document.getElementById(muscle.toLowerCase() + "Level").value || 3;
                 return new window[muscle](level, 50, 100 + muscleClasses.indexOf(muscle) * 20, false, true);
             });
-            
+
             muscles.forEach(muscle => {
                 if (muscle.isBack) muscle.draw(ctx, centerX);
             });
         }
-        
+
+        // Adding the muscle training level inputs dynamically
         document.addEventListener("DOMContentLoaded", function () {
             const muscleInputsDiv = document.getElementById("muscleInputs");
             let inputHTML = "<h3>Set Muscle Training Levels</h3>";
             muscleClasses.forEach(muscle => {
-                inputHTML += `<label>${muscle}: <input type="number" id="${muscle.toLowerCase()}Level" value="3"></label>`;
+                inputHTML += `<label>${muscle}: <input type="number" id="${muscle.toLowerCase()}Level" value="3"></label><br>`;
             });
             muscleInputsDiv.innerHTML = inputHTML;
         });
+
+        // Adding exercise to the exercise list
+        function addExercise() {
+            var select = document.getElementById("exercise");
+            var selectedExercise = select.options[select.selectedIndex].text;
+
+            var list = document.getElementById("exercise-list");
+            var listItem = document.createElement("li");
+            listItem.textContent = selectedExercise;
+            list.appendChild(listItem);
+        }
     </script>
 </head>
 <body>
     <header>
         <h1>Gym Scheduling Web App</h1>
     </header>
-    
+
     <section style="display: flex; justify-content: center; gap: 20px;">
         <div>
             <h2>Avatar Simulation Front</h2>
             <canvas id="simulationCanvas" width="400" height="400" style="border:1px solid black;"></canvas>
             <br>
-            <button onclick="drawCharacter()">Draw Character</button>
+            <button onclick="drawCharacter()">Draw Character Front</button>
         </div>
         <div>
             <h2>Avatar Simulation Back</h2>
             <canvas id="simulationCanvasBack" width="400" height="400" style="border:1px solid black;"></canvas>
             <br>
-            <button onclick="drawCharacterBack()">Draw Character</button>
+            <button onclick="drawCharacterBack()">Draw Character Back</button>
         </div>
     </section>
 
     <section id="muscleInputs"></section>
+
+    <section>
+        <h2>Exercise Schedule</h2>
+        <label for="exercise">Select Exercise: </label>
+        <select id="exercise">
+            <option value="Push-ups">Push-ups</option>
+            <option value="Squats">Squats</option>
+            <option value="Lunges">Lunges</option>
+            <option value="Plank">Plank</option>
+        </select>
+        <button onclick="addExercise()">Add Exercise</button>
+
+        <h3>Selected Exercises</h3>
+        <ul id="exercise-list"></ul>
+    </section>
 </body>
 </html>
