@@ -26,17 +26,28 @@ class Muscle {
 }
 
 // DrawMuscle Class
-class DrawMuscle {
-    constructor(muscle) {
-        this.muscle = muscle;
+class DrawMuscle extends Muscle{
+    constructor() {
+        super();
+        //this.muscle = muscle;
         this.position = { x: 0, y: 0 };
     }
 
+    setPosition(pos){
+        if (pos.x < 0) {
+            throw new Error('Invalid value');
+        }
+        else if(pos.y < 0)
+            throw new Error('Invalid value');
+        else
+            this.position = pos;
+    }
+
     draw() {
-        if (this.muscle.back) {
+        if (this.isBack) {
             return 'Drawing muscle';
         }
-        if (this.muscle.front) {
+        if (this.isFront) {
             return 'Drawing muscle';
         }
         if (this.position.x < 0 || this.position.y < 0) {

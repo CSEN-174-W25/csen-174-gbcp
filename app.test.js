@@ -10,8 +10,7 @@ describe('Muscle Class Tests', () => {
   });
 
   test('Test 1: set values to negative', () => {
-    muscle.setValue(-5);
-    expect(muscle.value).toThrow("Invalid value");
+    expect(() => muscle.setValue(-5)).toThrow("Invalid value");
   });
 
   test('Test 2: set value to between 1-5', () => {
@@ -20,8 +19,7 @@ describe('Muscle Class Tests', () => {
   });
 
   test('Test 3: set value to over 5', () => {
-    muscle.setValue(10);
-    expect(muscle.value).toThrow("Invalid value");
+     expect(() => muscle.setValue(10)).toThrow("Invalid value");
   });
 
   test('Test 4: set front to true', () => {
@@ -41,11 +39,11 @@ describe('Draw Muscle Class Tests', () => {
 
   beforeEach(() => {
     muscle = new Muscle();
-    drawMuscle = new DrawMuscle(muscle);
+    drawMuscle = new DrawMuscle();
   });
 
   test('Test 1: nothing in back', () => {
-    muscle.setBack(false);
+    drawMuscle.setBack(false);
     expect(drawMuscle.draw()).toBe('Nothing to Draw');
   });
 
@@ -54,19 +52,17 @@ describe('Draw Muscle Class Tests', () => {
     expect(drawMuscle.draw()).toBe('Nothing to Draw');
   });
 
-  test('Test 3: negative position', () => {
-    drawMuscle.position.x = -1;
-    expect(drawMuscle.draw()).toThrow("Invalid value");
+  test('Test 3: x negative position', () => {
+    expect(() => drawMuscle.setPosition({x:-1,y:3})).toThrow("Invalid value");
   });
 
   test('Test 4: y pos negative', () => {
-    drawMuscle.position.y = -1;
-    expect(drawMuscle.draw()).toThrow("Invalid value");
+    expect(() => drawMuscle.setPosition({x:2,y:-1})).toThrow("Invalid value");
   });
 
   test('Test 5: test standard draw button', () => {
-    muscle.setBack(true);
-    expect(drawMuscle.draw()).toBe('Drawing Muscle');
+    drawMuscle.setBack(true);
+    expect(drawMuscle.draw()).toBe('Drawing muscle');
   });
 });
 
