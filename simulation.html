@@ -8,12 +8,13 @@
     <script>
         // Muscle Class - Base class
         class Muscle {
-            constructor(trainingLevel, centerXOffset, yPosition, isFront, isBack) {
+            constructor(trainingLevel, centerXOffset, yPosition, isFront, isBack, angle) {
                 this.trainingLevel = trainingLevel;
                 this.centerXOffset = centerXOffset;
                 this.yPosition = yPosition;
                 this.isFront = isFront;
                 this.isBack = isBack;
+                this.angle = angle;
             }
 
             draw(ctx, centerX) {
@@ -21,33 +22,19 @@
             }
         }
 
-        // Biceps Class - Subclass of Muscle
-        class Biceps extends Muscle {
-            draw(ctx, centerX) {
-                if (this.isFront) {
-                    ctx.fillStyle = "red";
-                    ctx.beginPath();
-                    ctx.ellipse(centerX - this.centerXOffset, this.yPosition, this.trainingLevel * 5, this.trainingLevel * 8, 0, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.beginPath();
-                    ctx.ellipse(centerX + this.centerXOffset, this.yPosition, this.trainingLevel * 5, this.trainingLevel * 8, 0, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-            }
-        }
-
         // Dynamically create classes for each muscle
-        const muscleClasses = ['Triceps', 'Forearms', 'Shoulders', 'Abs', 'Chest', 'Lats', 'Traps', 'Quads', 'Hamstrings', 'Calves'];
+        const muscleClasses = ['Triceps','Biceps', 'Forearms', 'Shoulders', 'Abs', 'Chest', 'Lats', 'Traps', 'Quads', 'Hamstrings', 'Calves'];
         muscleClasses.forEach(muscle => {
             class DynamicMuscle extends Muscle {
                 draw(ctx, centerX) {
                     if ((this.isBack && muscle !== 'Abs' && muscle !== 'Chest') || this.isFront) {
                         ctx.fillStyle = "blue";
                         ctx.beginPath();
-                        ctx.ellipse(centerX - this.centerXOffset, this.yPosition, this.trainingLevel * 5, this.trainingLevel * 8, 0, 0, Math.PI * 2);
+                        //x, y, x_radius, y_radius, rotation, start_angle, end_angle, direction
+                        ctx.ellipse(centerX - this.centerXOffset, this.yPosition, this.trainingLevel * 5, this.trainingLevel * 8, this.angle,0, Math.PI * 2);
                         ctx.fill();
                         ctx.beginPath();
-                        ctx.ellipse(centerX + this.centerXOffset, this.yPosition, this.trainingLevel * 5, this.trainingLevel * 8, 0, 0, Math.PI * 2);
+                        ctx.ellipse(centerX + this.centerXOffset, this.yPosition, this.trainingLevel * 5, this.trainingLevel * 8, -this.angle,0, Math.PI * 2);
                         ctx.fill();
                     }
                 }
@@ -55,39 +42,152 @@
             window[muscle] = DynamicMuscle;
         });
 
+        const musclePositions = {
+            Biceps: { xOffset: 40, yPos: 120, front: true, back: false, angle: 0},
+            Triceps: { xOffset: 40, yPos: 120, front: false, back: true, angle: 0 },
+            Forearms: { xOffset: 30, yPos: 150, front: true, back: true, angle: 0 },
+            Shoulders: { xOffset: 20, yPos: 80, front: true, back: true, angle: 0 },
+            Abs: { xOffset: 0, yPos: 180, front: true, back: false, angle: 0 },
+            Chest: { xOffset: .5, yPos: 140, front: true, back: false, angle: 0 },
+            Lats: { xOffset: 50, yPos: 140, front: false, back: true, angle: 0 },
+            Traps: { xOffset: 10, yPos: 60, front: true, back: true, angle: 0 },
+            Quads: { xOffset: 30, yPos: 255, front: true, back: false, angle: .74 },
+            Hamstrings: { xOffset: 20, yPos: 275, front: true, back: true, angle:.74 },
+            Calves: { xOffset: +50, yPos: 320, front: true, back: true, angle: 0 }
+};
+
+
+
+function drawStickFigure(ctx, centerX) {
+    let v = 30;
+    ctx.strokeStyle = "black"; // Stick figure color
+    ctx.lineWidth = 3;
+
+    // Head
+    ctx.beginPath();
+    ctx.arc(centerX, 50, 20, 0, Math.PI * 2); // Head
+    ctx.stroke();
+
+    // Body
+    ctx.beginPath();
+    ctx.moveTo(centerX, 70);
+    ctx.lineTo(centerX, 200 + v); // Torso
+    ctx.stroke();
+
+    // Arms
+    ctx.beginPath();
+    ctx.moveTo(centerX - 70, 120 ); // Left arm
+    ctx.lineTo(centerX + 70, 120); // Right arm
+    ctx.stroke();
+
+    // Arms2
+    ctx.beginPath();
+    ctx.moveTo(centerX - 70, 120); // Left arm
+    ctx.lineTo(centerX - 70, 70); // Right arm
+    ctx.stroke();
+
+     // Arms3
+     ctx.beginPath();
+    ctx.moveTo(centerX + 70, 120); // Left arm
+    ctx.lineTo(centerX + 70, 70); // Right arm
+    ctx.stroke();
+
+    // Legs
+    ctx.beginPath();
+    ctx.moveTo(centerX, 200 + v);
+    ctx.lineTo(centerX - 50, 260 + v); // Left leg
+    ctx.moveTo(centerX, 200 + v);
+    ctx.lineTo(centerX + 50, 260 + v); // Right leg
+    ctx.stroke();
+
+    // legs2
+    ctx.beginPath();
+    ctx.moveTo(centerX - 50, 260 + v); // Left arm
+    ctx.lineTo(centerX - 50, 330 + v); // Right arm
+    ctx.stroke();
+
+      // legs3
+    ctx.beginPath();
+    ctx.moveTo(centerX + 50, 260 + v); // Left arm
+    ctx.lineTo(centerX + 50, 330 + v); // Right arm
+    ctx.stroke();
+
+}
+
+
         // Function to draw the character on the front canvas
         function drawCharacter() {
-            const canvas = document.getElementById("simulationCanvas");
-            const ctx = canvas.getContext("2d");
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const canvas = document.getElementById("simulationCanvas");
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawStickFigureOnLoad();
+    
+    const centerX = canvas.width / 2;
 
-            const centerX = canvas.width / 2;
-            const muscles = muscleClasses.map(muscle => {
-                const level = document.getElementById(muscle.toLowerCase() + "Level").value || 3;
-                return new window[muscle](level, 50, 100 + muscleClasses.indexOf(muscle) * 20, true, false);
-            });
+    muscleClasses.forEach(muscle => {
+        const level = document.getElementById(muscle.toLowerCase() + "Level").value || 3;
+        const pos = musclePositions[muscle];
 
-            muscles.forEach(muscle => {
-                if (muscle.isFront) muscle.draw(ctx, centerX);
-            });
+        if (pos && pos.front) {
+            const muscleInstance = new window[muscle](
+                level, pos.xOffset, pos.yPos, true, false, pos.angle 
+            );
+            muscleInstance.draw(ctx, centerX);
         }
+    });
+}
 
-        // Function to draw the character on the back canvas
-        function drawCharacterBack() {
-            const canvas = document.getElementById("simulationCanvasBack");
-            const ctx = canvas.getContext("2d");
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+function drawCharacterBack() {
+    const canvas = document.getElementById("simulationCanvasBack");
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawStickFigureOnLoad();
 
-            const centerX = canvas.width / 2;
-            const muscles = muscleClasses.map(muscle => {
-                const level = document.getElementById(muscle.toLowerCase() + "Level").value || 3;
-                return new window[muscle](level, 50, 100 + muscleClasses.indexOf(muscle) * 20, false, true);
-            });
+    const centerX = canvas.width / 2;
 
-            muscles.forEach(muscle => {
-                if (muscle.isBack) muscle.draw(ctx, centerX);
-            });
+    muscleClasses.forEach(muscle => {
+        const level = document.getElementById(muscle.toLowerCase() + "Level").value || 3;
+        const pos = musclePositions[muscle];
+
+        if (pos && pos.back) {
+            const muscleInstance = new window[muscle](
+                level, pos.xOffset, pos.yPos, false, true, pos.angle
+            );
+            muscleInstance.draw(ctx, centerX);
         }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Draw stick figure on both canvases when page loads
+    drawStickFigureOnLoad();
+    
+    // Generate muscle level input fields
+    const muscleInputsDiv = document.getElementById("muscleInputs");
+    let inputHTML = "<h3>Set Muscle Training Levels</h3>";
+    muscleClasses.forEach(muscle => {
+        inputHTML += `<label>${muscle}: <input type="number" id="${muscle.toLowerCase()}Level" value="3"></label><br>`;
+    });
+    muscleInputsDiv.innerHTML = inputHTML;
+});
+
+function drawStickFigureOnLoad() {
+    const frontCanvas = document.getElementById("simulationCanvas");
+    const backCanvas = document.getElementById("simulationCanvasBack");
+
+    if (frontCanvas && backCanvas) {
+        const frontCtx = frontCanvas.getContext("2d");
+        const backCtx = backCanvas.getContext("2d");
+
+        frontCtx.clearRect(0, 0, frontCanvas.width, frontCanvas.height);
+        backCtx.clearRect(0, 0, backCanvas.width, backCanvas.height);
+
+        const centerX = frontCanvas.width / 2;
+
+        drawStickFigure(frontCtx, centerX);
+        drawStickFigure(backCtx, centerX);
+    }
+}
 
         // Adding the muscle training level inputs dynamically
         document.addEventListener("DOMContentLoaded", function () {
@@ -121,6 +221,7 @@
             <h2>Avatar Simulation Front</h2>
             <canvas id="simulationCanvas" width="400" height="400" style="border:1px solid black;"></canvas>
             <br>
+
             <button onclick="drawCharacter()">Draw Character Front</button>
         </div>
         <div>
