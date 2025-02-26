@@ -41,17 +41,16 @@
             }
             window[muscle] = DynamicMuscle;
         });
-
-        const musclePositions = {
-            Biceps: { xOffset: 40, yPos: 120, front: true, back: false, angle: 0},
-            Triceps: { xOffset: 40, yPos: 120, front: false, back: true, angle: 0 },
-            Forearms: { xOffset: 30, yPos: 150, front: true, back: true, angle: 0 },
-            Shoulders: { xOffset: 20, yPos: 80, front: true, back: true, angle: 0 },
-            Abs: { xOffset: 0, yPos: 180, front: true, back: false, angle: 0 },
-            Chest: { xOffset: .5, yPos: 140, front: true, back: false, angle: 0 },
+            const musclePositions = {
+            Biceps: { xOffset: 40, yPos: 110, front: true, back: false, angle: Math.PI/2},
+            Triceps: { xOffset: 40, yPos: 130, front: true, back: false, angle: Math.PI/2},
+            Forearms: { xOffset: 70, yPos: 95, front: true, back: true, angle: 0 },
+            Shoulders: { xOffset: 25, yPos: 110, front: true, back: false, angle: Math.PI/2},
+            Abs: { xOffset: 10, yPos: 200, front: true, back: false, angle: 0 },
+            Chest: { xOffset: 10, yPos: 140, front: true, back: false, angle: 0 },
             Lats: { xOffset: 50, yPos: 140, front: false, back: true, angle: 0 },
-            Traps: { xOffset: 10, yPos: 60, front: true, back: true, angle: 0 },
-            Quads: { xOffset: 30, yPos: 255, front: true, back: false, angle: .74 },
+            Traps: { xOffset: 10, yPos: 60, front: false, back: true, angle: 0 },
+            Quads: { xOffset: 30, yPos: 255, front: false, back: false, angle: .74 },
             Hamstrings: { xOffset: 20, yPos: 275, front: true, back: true, angle:.74 },
             Calves: { xOffset: +50, yPos: 320, front: true, back: true, angle: 0 }
 };
