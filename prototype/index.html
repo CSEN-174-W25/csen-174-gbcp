@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Scheduling Web App</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelector("form").addEventListener("submit", function (event) {
+                event.preventDefault();
+                addExercise();
+            });
+
+            document.getElementById("clear-schedule").addEventListener("click", function () {
+                clearSchedule();
+            });
+        });
+
+        function addExercise() {
+            var select = document.getElementById("exercise");
+            var selectedExercise = select.options[select.selectedIndex].text;
+
+            var list = document.getElementById("exercise-list");
+            if (!list) {
+                list = document.createElement("ul");
+                list.id = "exercise-list";
+                document.getElementById("exercise-selector").appendChild(list);
+            }
+
+            var listItem = document.createElement("li");
+            listItem.textContent = selectedExercise + " ";
+
+            // Add remove button
+            var removeButton = document.createElement("button");
+            removeButton.textContent = "Remove";
+            removeButton.onclick = function () {
+                listItem.remove();
+            };
+
+            listItem.appendChild(removeButton);
+            list.appendChild(listItem);
+        }
+
+        function clearSchedule() {
+            var list = document.getElementById("exercise-list");
+            if (list) {
+                list.innerHTML = "";
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Gym Scheduling Web App</h1>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="signup.html">Sign Up</a></li>
+                <li><a href="simulation.html">Simulation</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home">
+        <h2>Welcome to Your Gym Planner!</h2>
+        <p>Track and plan your weekly workouts while having fun with your avatar!</p>
+        <a href="signup.html" class="cta-button">Get Started</a>
+    </section>
+
+    <section id="calendar">
+        <h2>Workout Calendar</h2>
+        <iframe src="https://calendar.google.com/calendar/embed?src=yourcalendarid&ctz=yourtimezone" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+    </section>
+
+    <section id="exercise-selector">
+        <h2>Add Exercises to Your Schedule</h2>
+        <form>
+            <label for="exercise">Choose an exercise:</label>
+            <select id="exercise" name="exercise">
+                <option value="bench_press">Bench Press</option>
+                <option value="squat">Squat</option>
+                <option value="calf_raises">Calf Raises</option>
+                <option value="deadlift">Deadlift</option>
+                <option value="rdls">RDLs</option>
+                <option value="overhead_press">Overhead Press</option>
+                <option value="pull_ups">Pull-ups</option>
+                <option value="rows">Rows</option>
+                <option value="bicep_curls">Lat Pulldowns</option>
+                <option value="bicep_curls">Bicep Curls</option>
+                <option value="hammer_curls">Hammer Curls</option>
+                <option value="tricep_dips">Tricep Dips</option>
+                <option value="skull_crushers">Skull Crushers</option>
+                <option value="lateral_raises">Lateral Raises</option>
+                <option value="lunges">Lunges</option>
+                <option value="planks">Planks</option>
+            </select>
+            <button type="submit">Add to Schedule</button>
+        </form>
+        <button id="clear-schedule">Clear Schedule</button>
+        <ul id="exercise-list"></ul>
+    </section>
+</body>
+</html>
