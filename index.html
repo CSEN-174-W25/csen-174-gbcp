@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gym Scheduling Web App</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             document.querySelector("form").addEventListener("submit", function (event) {
@@ -29,11 +29,12 @@
             }
 
             var listItem = document.createElement("li");
+            listItem.className = "flex justify-between items-center p-2 bg-white shadow rounded-md mb-2";
             listItem.textContent = selectedExercise + " ";
 
-            // Add remove button
             var removeButton = document.createElement("button");
             removeButton.textContent = "Remove";
+            removeButton.className = "text-red-500 hover:text-red-700";
             removeButton.onclick = function () {
                 listItem.remove();
             };
@@ -50,37 +51,34 @@
         }
     </script>
 </head>
-<body>
-    <header>
-        <h1>Gym Scheduling Web App</h1>
-        <nav>
-            <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a href="signup.html">Sign Up</a></li>
-                <li><a href="simulation.html">Simulation</a></li>
-            </ul>
+<body class="bg-gray-100 min-h-screen p-6">
+    <header class="mb-6">
+        <h1 class="text-4xl font-bold text-center mb-4">Gym Scheduling Web App</h1>
+        <nav class="flex justify-center space-x-4">
+            <a href="#home" class="text-blue-600 hover:underline">Home</a>
+            <a href="#about" class="text-blue-600 hover:underline">About</a>
+            <a href="#contact" class="text-blue-600 hover:underline">Contact</a>
+            <a href="login.html" class="text-blue-600 hover:underline">Login</a>
+            <a href="signup.html" class="text-blue-600 hover:underline">Sign Up</a>
+            <a href="simulation.html" class="text-blue-600 hover:underline">Simulation</a>
         </nav>
     </header>
 
-    <section id="home">
-        <h2>Welcome to Your Gym Planner!</h2>
-        <p>Track and plan your weekly workouts while having fun with your avatar!</p>
-        <a href="signup.html" class="cta-button">Get Started</a>
+    <section id="home" class="text-center mb-8">
+        <h2 class="text-2xl font-semibold mb-2">Welcome to Your Gym Planner!</h2>
+        <p class="mb-4">Track and plan your weekly workouts while having fun with your avatar!</p>
+        <a href="signup.html" class="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Get Started</a>
     </section>
 
-    <section id="calendar">
-        <h2>Workout Calendar</h2>
-        <iframe src="https://calendar.google.com/calendar/embed?src=yourcalendarid&ctz=yourtimezone" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+    <section id="calendar" class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Workout Calendar</h2>
+        <iframe src="https://calendar.google.com/calendar/embed?src=yourcalendarid&ctz=yourtimezone" style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
     </section>
 
     <section id="exercise-selector">
-        <h2>Add Exercises to Your Schedule</h2>
-        <form>
-            <label for="exercise">Choose an exercise:</label>
-            <select id="exercise" name="exercise">
+        <h2 class="text-2xl font-semibold mb-4">Add Exercises to Your Schedule</h2>
+        <form class="flex mb-4 space-x-2">
+            <select id="exercise" name="exercise" class="p-2 border rounded-md flex-grow">
                 <option value="bench_press">Bench Press</option>
                 <option value="squat">Squat</option>
                 <option value="calf_raises">Calf Raises</option>
@@ -89,7 +87,7 @@
                 <option value="overhead_press">Overhead Press</option>
                 <option value="pull_ups">Pull-ups</option>
                 <option value="rows">Rows</option>
-                <option value="bicep_curls">Lat Pulldowns</option>
+                <option value="lat_pulldowns">Lat Pulldowns</option>
                 <option value="bicep_curls">Bicep Curls</option>
                 <option value="hammer_curls">Hammer Curls</option>
                 <option value="tricep_dips">Tricep Dips</option>
@@ -98,9 +96,9 @@
                 <option value="lunges">Lunges</option>
                 <option value="planks">Planks</option>
             </select>
-            <button type="submit">Add to Schedule</button>
+            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Add to Schedule</button>
         </form>
-        <button id="clear-schedule">Clear Schedule</button>
+        <button id="clear-schedule" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mb-4">Clear Schedule</button>
         <ul id="exercise-list"></ul>
     </section>
 </body>
