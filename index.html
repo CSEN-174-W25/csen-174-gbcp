@@ -132,6 +132,15 @@ function drawCharacter() {
         }
     });
 }
+function updateLevel(lev, mus) {
+    muscleClasses.forEach(muscle => {
+        const muscleInput = document.getElementById(muscle.toLowerCase() + "Level");
+        
+        if (muscle.toLowerCase() === mus.toLowerCase() && muscleInput) {
+            muscleInput.value = lev;
+        }
+    });
+}
 
 
 
@@ -152,20 +161,10 @@ function drawStickFigureOnLoad() {
             const muscleInputsDiv = document.getElementById("muscleInputs");
             let inputHTML = "";
             muscleClasses.forEach(muscle => {
-                inputHTML += `<label style="display: none;">${muscle}: <input type="number" id="${muscle.toLowerCase()}Level" value="2"></label><br>`;
+                inputHTML += `<label style="display: none;">${muscle}: <input type="number" id="${muscle.toLowerCase()}Level" value="1"></label><br>`;
             });
             muscleInputsDiv.innerHTML = inputHTML;
         });
-
-        function addExercise() {
-            var select = document.getElementById("exercise");
-            var selectedExercise = select.options[select.selectedIndex].text;
-
-            var list = document.getElementById("exercise-list");
-            var listItem = document.createElement("li");
-            listItem.textContent = selectedExercise;
-            list.appendChild(listItem);
-        }
 
         document.addEventListener("DOMContentLoaded", function () {
             document.querySelector("form").addEventListener("submit", function (event) {
@@ -181,6 +180,120 @@ function drawStickFigureOnLoad() {
         function addExercise() {
             var select = document.getElementById("exercise");
             var selectedExercise = select.options[select.selectedIndex].text;
+
+            if(selectedExercise.toLowerCase() == "bench press"){
+                const muscleInput1 = document.getElementById("chest" + "Level");
+                updateLevel(String(parseFloat(muscleInput1.value)+.5), "chest");
+                const muscleInput2 = document.getElementById("triceps" + "Level");
+                updateLevel(String(parseFloat(muscleInput2.value)+.2), "triceps");
+            }
+
+            if(selectedExercise.toLowerCase() == "squat"){
+                const muscleInput = document.getElementById("hamstrings" + "Level");
+                updateLevel(String(parseFloat(muscleInput.value)+.5), "hamstrings");
+                const muscleInput1 = document.getElementById("quads" + "Level");
+                updateLevel(String(parseFloat(muscleInput1.value)+.5), "quads");
+            }
+
+            if(selectedExercise.toLowerCase() == "calf raises"){
+                const muscleInput = document.getElementById("calves" + "Level");
+                updateLevel(String(parseFloat(muscleInput.value)+.5), "calves");
+            }
+
+            if(selectedExercise.toLowerCase() == "deadlift"){
+                const muscleInput1 = document.getElementById("hamstrings" + "Level");
+                updateLevel(String(parseFloat(muscleInput1.value)+.5), "hamstrings");
+                const muscleInput2 = document.getElementById("glutes" + "Level");
+                updateLevel(String(parseFloat(muscleInput2.value)+.5), "glutes");
+                const muscleInput3 = document.getElementById("lower_back" + "Level");
+                updateLevel(String(parseFloat(muscleInput3.value)+.5), "lower_back");
+                const muscleInput4 = document.getElementById("lats" + "Level");
+                updateLevel(String(parseFloat(muscleInput4.value)+.2), "lats");
+                const muscleInput5 = document.getElementById("traps" + "Level");
+                updateLevel(String(parseFloat(muscleInput5.value)+.2), "traps");
+            }
+
+            if(selectedExercise.toLowerCase() == "rdls"){
+                const muscleInput1 = document.getElementById("hamstrings" + "Level");
+                updateLevel(String(parseFloat(muscleInput1.value)+.5), "hamstrings");
+                const muscleInput2 = document.getElementById("glutes" + "Level");
+                updateLevel(String(parseFloat(muscleInput2.value)+.5), "glutes");
+            }
+
+            if(selectedExercise.toLowerCase() == "overhead press"){
+                const muscleInput = document.getElementById("shoulders" + "Level");
+                updateLevel(String(parseFloat(muscleInput.value)+.5), "shoulders");
+                const muscleInput1 = document.getElementById("triceps" + "Level");
+                updateLevel(String(parseFloat(muscleInput1.value)+.3), "triceps");
+            }
+
+            if(selectedExercise.toLowerCase() == "pull-ups"){
+                const muscleInput1 = document.getElementById("lats" + "Level");
+                updateLevel(String(parseFloat(muscleInput1.value)+.5), "lats");
+                const muscleInput2 = document.getElementById("biceps" + "Level");
+                updateLevel(String(parseFloat(muscleInput2.value)+.3), "biceps");
+            }
+
+            if(selectedExercise.toLowerCase() == "rows"){
+                const muscleInput1 = document.getElementById("lats" + "Level");
+                updateLevel(String(parseFloat(muscleInput1.value)+.5), "lats");
+                const muscleInput2 = document.getElementById("traps" + "Level");
+                updateLevel(String(parseFloat(muscleInput2.value)+.3), "traps");
+                const muscleInput3 = document.getElementById("biceps" + "Level");
+                updateLevel(String(parseFloat(muscleInput3.value)+.3), "biceps");
+            }
+
+            if(selectedExercise.toLowerCase() == "lat pulldowns"){
+                const muscleInput1 = document.getElementById("lats" + "Level");
+                updateLevel(String(parseFloat(muscleInput1.value)+.5), "lats");
+                const muscleInput2 = document.getElementById("biceps" + "Level");
+                updateLevel(String(parseFloat(muscleInput2.value)+.3), "biceps");
+            }
+
+            if(selectedExercise.toLowerCase() == "bicep curls"){
+                const muscleInput = document.getElementById("biceps" + "Level");
+                updateLevel(String(parseFloat(muscleInput.value)+.5), "biceps");
+            }
+
+            if(selectedExercise.toLowerCase() == "hammer curls"){
+                const muscleInput = document.getElementById("biceps" + "Level");
+                updateLevel(String(parseFloat(muscleInput.value)+.5), "biceps");
+                const muscleInput1 = document.getElementById("forearms" + "Level");
+                updateLevel(String(parseFloat(muscleInput1.value)+.3), "forearms");
+            }
+
+            if(selectedExercise.toLowerCase() == "tricep dips"){
+                const muscleInput = document.getElementById("triceps" + "Level");
+                updateLevel(String(parseFloat(muscleInput.value)+.5), "triceps");
+                const muscleInput1 = document.getElementById("shoulders" + "Level");
+                updateLevel(String(parseFloat(muscleInput1.value)+.2), "shoulders");
+            }
+
+            if(selectedExercise.toLowerCase() == "skull crushers"){
+                const muscleInput = document.getElementById("triceps" + "Level");
+                updateLevel(String(parseFloat(muscleInput.value)+.5), "triceps");
+            }
+
+            if(selectedExercise.toLowerCase() == "lateral raises"){
+                const muscleInput = document.getElementById("shoulders" + "Level");
+                updateLevel(String(parseFloat(muscleInput.value)+.5), "shoulders");
+            }
+
+            if(selectedExercise.toLowerCase() == "lunges"){
+                const muscleInput1 = document.getElementById("quads" + "Level");
+                updateLevel(String(parseFloat(muscleInput1.value)+.5), "quads");
+                const muscleInput2 = document.getElementById("hamstrings" + "Level");
+                updateLevel(String(parseFloat(muscleInput2.value)+.5), "hamstrings");
+                const muscleInput3 = document.getElementById("glutes" + "Level");
+                updateLevel(String(parseFloat(muscleInput3.value)+.5), "glutes");
+            }
+
+            if(selectedExercise.toLowerCase() == "planks"){
+                const muscleInput = document.getElementById("abs" + "Level");
+                updateLevel(String(parseFloat(muscleInput.value)+.5), "abs");
+            }
+
+            
 
             var list = document.getElementById("exercise-list");
             if (!list) {
@@ -209,6 +322,19 @@ function drawStickFigureOnLoad() {
             if (list) {
                 list.innerHTML = "";
             }
+            
+            updateLevel(1, "biceps");
+            updateLevel(1, "triceps");
+            updateLevel(1, "forearms");
+            updateLevel(1, "shoulders");
+            updateLevel(1, "abs");
+            updateLevel(1, "chest");
+            updateLevel(1, "lats");
+            updateLevel(1, "traps");
+            updateLevel(1, "quads");
+            updateLevel(1, "hamstrings");
+            updateLevel(1, "calves");
+            
         }
     </script>
 </head>
