@@ -152,7 +152,7 @@ function drawStickFigureOnLoad() {
             const muscleInputsDiv = document.getElementById("muscleInputs");
             let inputHTML = "";
             muscleClasses.forEach(muscle => {
-                inputHTML += `<label style="display: none;">${muscle}: <input type="number" id="${muscle.toLowerCase()}Level" value="2"></label><br>`;
+                inputHTML += `<label style="display: none;">${muscle}: <input type="number" id="${muscle.toLowerCase()}Level" value="1"></label><br>`;
             });
             muscleInputsDiv.innerHTML = inputHTML;
         });
