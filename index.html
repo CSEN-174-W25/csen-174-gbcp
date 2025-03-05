@@ -6,6 +6,194 @@
     <title>Gym Scheduling Web App</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <script>
+
+class Muscle {
+            constructor(trainingLevel, centerXOffset, yPosition, isFront, isBack, angle) {
+                this.trainingLevel = trainingLevel;
+                this.centerXOffset = centerXOffset;
+                this.yPosition = yPosition;
+                this.isFront = isFront;
+                this.isBack = isBack;
+                this.angle = angle;
+            }
+
+            draw(ctx, centerX) {
+                throw new Error("draw must be implemented by subclasses");
+            }
+        }
+
+        const muscleClasses = ['Triceps','Biceps', 'Forearms', 'Shoulders', 'Abs', 'Chest', 'Lats', 'Traps', 'Quads', 'Hamstrings', 'Calves'];
+        muscleClasses.forEach(muscle => {
+            class DynamicMuscle extends Muscle {
+                draw(ctx, centerX) {
+                    if ((this.isBack && muscle !== 'Abs' && muscle !== 'Chest') || this.isFront) {
+                        ctx.fillStyle = "blue";
+                        ctx.beginPath();
+                        //x, y, x_radius, y_radius, rotation, start_angle, end_angle, direction
+                        ctx.ellipse(centerX - this.centerXOffset, this.yPosition, this.trainingLevel * 5, this.trainingLevel * 8, this.angle,0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.beginPath();
+                        ctx.ellipse(centerX + this.centerXOffset, this.yPosition, this.trainingLevel * 5, this.trainingLevel * 8, -this.angle,0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            }
+            window[muscle] = DynamicMuscle;
+        });
+            const musclePositions = {
+            Biceps: { xOffset: 40, yPos: 110, front: true, back: false, angle: Math.PI/2},
+            Triceps: { xOffset: 40, yPos: 130, front: true, back: false, angle: Math.PI/2},
+            Forearms: { xOffset: 70, yPos: 95, front: true, back: true, angle: 0 },
+            Shoulders: { xOffset: 25, yPos: 110, front: true, back: false, angle: Math.PI/2},
+            Abs: { xOffset: 10, yPos: 200, front: true, back: false, angle: 0 },
+            Chest: { xOffset: 10, yPos: 140, front: true, back: false, angle: 0 },
+            Lats: { xOffset: 40, yPos: 160, front: true, back: true, angle: -Math.PI/4 },
+            Traps: { xOffset: 10, yPos: 110, front: true, back: true, angle: Math.PI/2.5 },
+            Quads: { xOffset: 30, yPos: 255, front: true, back: false, angle: .74 },
+            Hamstrings: { xOffset: 20, yPos: 275, front: true, back: true, angle:.74 },
+            Calves: { xOffset: +50, yPos: 320, front: true, back: true, angle: 0 }
+};
+
+
+
+function drawStickFigure(ctx, centerX) {
+    let v = 30;
+    ctx.strokeStyle = "black"; // Stick figure color
+    ctx.lineWidth = 3;
+
+    // Head
+    ctx.beginPath();
+    ctx.arc(centerX, 50, 20, 0, Math.PI * 2); // Head
+    ctx.stroke();
+
+    // Body
+    ctx.beginPath();
+    ctx.moveTo(centerX, 70);
+    ctx.lineTo(centerX, 200 + v); // Torso
+    ctx.stroke();
+
+    // Arms
+    ctx.beginPath();
+    ctx.moveTo(centerX - 70, 120 ); // Left arm
+    ctx.lineTo(centerX + 70, 120); // Right arm
+    ctx.stroke();
+
+    // Arms2
+    ctx.beginPath();
+    ctx.moveTo(centerX - 70, 120); // Left arm
+    ctx.lineTo(centerX - 70, 70); // Right arm
+    ctx.stroke();
+
+     // Arms3
+     ctx.beginPath();
+    ctx.moveTo(centerX + 70, 120); // Left arm
+    ctx.lineTo(centerX + 70, 70); // Right arm
+    ctx.stroke();
+
+    // Legs
+    ctx.beginPath();
+    ctx.moveTo(centerX, 200 + v);
+    ctx.lineTo(centerX - 50, 260 + v); // Left leg
+    ctx.moveTo(centerX, 200 + v);
+    ctx.lineTo(centerX + 50, 260 + v); // Right leg
+    ctx.stroke();
+
+    // legs2
+    ctx.beginPath();
+    ctx.moveTo(centerX - 50, 260 + v); // Left arm
+    ctx.lineTo(centerX - 50, 330 + v); // Right arm
+    ctx.stroke();
+
+      // legs3
+    ctx.beginPath();
+    ctx.moveTo(centerX + 50, 260 + v); // Left arm
+    ctx.lineTo(centerX + 50, 330 + v); // Right arm
+    ctx.stroke();
+
+}
+
+function drawCharacter() {
+    const canvas = document.getElementById("simulationCanvas");
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawStickFigureOnLoad();
+    
+    const centerX = canvas.width / 2;
+
+    muscleClasses.forEach(muscle => {
+        const level = document.getElementById(muscle.toLowerCase() + "Level").value || 3;
+        const pos = musclePositions[muscle];
+
+        if (pos && pos.front) {
+            const muscleInstance = new window[muscle](
+                level, pos.xOffset, pos.yPos, true, false, pos.angle 
+            );
+            muscleInstance.draw(ctx, centerX);
+        }
+    });
+}
+
+function drawCharacterBack() {
+    const canvas = document.getElementById("simulationCanvasBack");
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawStickFigureOnLoad();
+
+    const centerX = canvas.width / 2;
+
+    muscleClasses.forEach(muscle => {
+        const level = document.getElementById(muscle.toLowerCase() + "Level").value || 3;
+        const pos = musclePositions[muscle];
+
+        if (pos && pos.back) {
+            const muscleInstance = new window[muscle](
+                level, pos.xOffset, pos.yPos, false, true, pos.angle
+            );
+            muscleInstance.draw(ctx, centerX);
+        }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    drawStickFigureOnLoad();
+    const muscleInputsDiv = document.getElementById("muscleInputs");
+    let inputHTML = "<h3>Set Muscle Training Levels</h3>";
+    muscleClasses.forEach(muscle => {
+        inputHTML += `<label>${muscle}: <input type="number" id="${muscle.toLowerCase()}Level" value="3"></label><br>`;
+    });
+    muscleInputsDiv.innerHTML = inputHTML;
+});
+
+function drawStickFigureOnLoad() {
+    const frontCanvas = document.getElementById("simulationCanvas");
+    if (frontCanvas) {
+        const frontCtx = frontCanvas.getContext("2d");
+        frontCtx.clearRect(0, 0, frontCanvas.width, frontCanvas.height);
+
+        const centerX = frontCanvas.width / 2;
+
+        drawStickFigure(frontCtx, centerX);
+    }
+}
+        document.addEventListener("DOMContentLoaded", function () {
+            const muscleInputsDiv = document.getElementById("muscleInputs");
+            let inputHTML = "<h3>Set Muscle Training Levels</h3>";
+            muscleClasses.forEach(muscle => {
+                inputHTML += `<label>${muscle}: <input type="number" id="${muscle.toLowerCase()}Level" value="3"></label><br>`;
+            });
+            muscleInputsDiv.innerHTML = inputHTML;
+        });
+
+        function addExercise() {
+            var select = document.getElementById("exercise");
+            var selectedExercise = select.options[select.selectedIndex].text;
+
+            var list = document.getElementById("exercise-list");
+            var listItem = document.createElement("li");
+            listItem.textContent = selectedExercise;
+            list.appendChild(listItem);
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
             document.querySelector("form").addEventListener("submit", function (event) {
                 event.preventDefault();
@@ -99,6 +287,38 @@
             <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Add to Schedule</button>
         </form>
         <button id="clear-schedule" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mb-4">Clear Schedule</button>
+        <ul id="exercise-list"></ul>
+    </section>
+</head>
+<body>
+    <header>
+        <h1>Gym Scheduling Web App</h1>
+    </header>
+
+    <section style="display: flex; justify-content: center; gap: 20px;">
+        <div>
+            <h2>Avatar Simulation Front</h2>
+            <canvas id="simulationCanvas" width="400" height="400" style="border:1px solid black;"></canvas>
+            <br>
+
+            <button onclick="drawCharacter()">Draw Character Front</button>
+        </div>
+    </section>
+
+    <section id="muscleInputs"></section>
+
+    <section>
+        <h2>Exercise Schedule</h2>
+        <label for="exercise">Select Exercise: </label>
+        <select id="exercise">
+            <option value="Push-ups">Push-ups</option>
+            <option value="Squats">Squats</option>
+            <option value="Lunges">Lunges</option>
+            <option value="Plank">Plank</option>
+        </select>
+        <button onclick="addExercise()">Add Exercise</button>
+
+        <h3>Selected Exercises</h3>
         <ul id="exercise-list"></ul>
     </section>
 </body>
