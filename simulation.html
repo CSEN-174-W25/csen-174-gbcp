@@ -172,19 +172,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function drawStickFigureOnLoad() {
     const frontCanvas = document.getElementById("simulationCanvas");
-    const backCanvas = document.getElementById("simulationCanvasBack");
+    //const backCanvas = document.getElementById("simulationCanvasBack");
 
-    if (frontCanvas && backCanvas) {
+    if (frontCanvas) {
         const frontCtx = frontCanvas.getContext("2d");
-        const backCtx = backCanvas.getContext("2d");
+        //const backCtx = backCanvas.getContext("2d");
 
         frontCtx.clearRect(0, 0, frontCanvas.width, frontCanvas.height);
-        backCtx.clearRect(0, 0, backCanvas.width, backCanvas.height);
+        //backCtx.clearRect(0, 0, backCanvas.width, backCanvas.height);
 
         const centerX = frontCanvas.width / 2;
 
         drawStickFigure(frontCtx, centerX);
-        drawStickFigure(backCtx, centerX);
+       //drawStickFigure(backCtx, centerX);
     }
 }
 
@@ -223,12 +223,12 @@ function drawStickFigureOnLoad() {
 
             <button onclick="drawCharacter()">Draw Character Front</button>
         </div>
-        <div>
+        <!-- <div>
             <h2>Avatar Simulation Back</h2>
             <canvas id="simulationCanvasBack" width="400" height="400" style="border:1px solid black;"></canvas>
             <br>
             <button onclick="drawCharacterBack()">Draw Character Back</button>
-        </div>
+        </div> -->
     </section>
 
     <section id="muscleInputs"></section>
