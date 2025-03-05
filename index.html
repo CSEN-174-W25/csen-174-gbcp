@@ -133,36 +133,7 @@ function drawCharacter() {
     });
 }
 
-function drawCharacterBack() {
-    const canvas = document.getElementById("simulationCanvasBack");
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawStickFigureOnLoad();
 
-    const centerX = canvas.width / 2;
-
-    muscleClasses.forEach(muscle => {
-        const level = document.getElementById(muscle.toLowerCase() + "Level").value || 3;
-        const pos = musclePositions[muscle];
-
-        if (pos && pos.back) {
-            const muscleInstance = new window[muscle](
-                level, pos.xOffset, pos.yPos, false, true, pos.angle
-            );
-            muscleInstance.draw(ctx, centerX);
-        }
-    });
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-    drawStickFigureOnLoad();
-    const muscleInputsDiv = document.getElementById("muscleInputs");
-    let inputHTML = "<h3>Set Muscle Training Levels</h3>";
-    muscleClasses.forEach(muscle => {
-        inputHTML += `<label>${muscle}: <input type="number" id="${muscle.toLowerCase()}Level" value="3"></label><br>`;
-    });
-    muscleInputsDiv.innerHTML = inputHTML;
-});
 
 function drawStickFigureOnLoad() {
     const frontCanvas = document.getElementById("simulationCanvas");
@@ -176,10 +147,12 @@ function drawStickFigureOnLoad() {
     }
 }
         document.addEventListener("DOMContentLoaded", function () {
+            drawStickFigureOnLoad();
+            
             const muscleInputsDiv = document.getElementById("muscleInputs");
-            let inputHTML = "<h3>Set Muscle Training Levels</h3>";
+            let inputHTML = "";
             muscleClasses.forEach(muscle => {
-                inputHTML += `<label>${muscle}: <input type="number" id="${muscle.toLowerCase()}Level" value="3"></label><br>`;
+                inputHTML += `<label style="display: none;">${muscle}: <input type="number" id="${muscle.toLowerCase()}Level" value="2"></label><br>`;
             });
             muscleInputsDiv.innerHTML = inputHTML;
         });
@@ -259,6 +232,20 @@ function drawStickFigureOnLoad() {
         <iframe src="https://calendar.google.com/calendar/embed?src=yourcalendarid&ctz=yourtimezone" style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
     </section>
 
+</head>
+<body>
+    <header>
+        <h1>Gym Scheduling Web App</h1>
+    </header>
+
+    <section style="display: flex; justify-content: center; gap: 20px;">
+        <div>
+            <h2>Avatar Simulation Front</h2>
+            <canvas id="simulationCanvas" width="400" height="400" style="border:1px solid black;"></canvas>
+            <br>
+            <button onclick="drawCharacter()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Draw Character Front</button>
+        </div>
+    </section>
     <section id="exercise-selector">
         <h2 class="text-2xl font-semibold mb-4">Add Exercises to Your Schedule</h2>
         <form class="flex mb-4 space-x-2">
@@ -285,37 +272,8 @@ function drawStickFigureOnLoad() {
         <button id="clear-schedule" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mb-4">Clear Schedule</button>
         <ul id="exercise-list"></ul>
     </section>
-</head>
-<body>
-    <header>
-        <h1>Gym Scheduling Web App</h1>
-    </header>
-
-    <section style="display: flex; justify-content: center; gap: 20px;">
-        <div>
-            <h2>Avatar Simulation Front</h2>
-            <canvas id="simulationCanvas" width="400" height="400" style="border:1px solid black;"></canvas>
-            <br>
-
-            <button onclick="drawCharacter()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Draw Character Front</button>
-        </div>
-    </section>
-
     <section id="muscleInputs"></section>
+    
 
-    <section>
-        <h2>Exercise Schedule</h2>
-        <label for="exercise">Select Exercise: </label>
-        <select id="exercise">
-            <option value="Push-ups">Push-ups</option>
-            <option value="Squats">Squats</option>
-            <option value="Lunges">Lunges</option>
-            <option value="Plank">Plank</option>
-        </select>
-        <button onclick="addExercise()">Add Exercise</button>
-
-        <h3>Selected Exercises</h3>
-        <ul id="exercise-list"></ul>
-    </section>
 </body>
 </html>
