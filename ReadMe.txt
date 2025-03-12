@@ -1,1 +1,1 @@
-Test
+All relevant code is included on the main page through index.html. Previous iterations and test files are store in the folder PreviousCode
