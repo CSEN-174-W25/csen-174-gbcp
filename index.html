@@ -211,11 +211,11 @@ function drawStickFigureOnLoad() {
             var targetDate = getNextDayOfWeek(today, day);
 
             function formatDate(date) {
-                return date.toISOString().split("T")[0].replace(/-/g, ""); // YYYYMMDD format
+                return date.toISOString().split("T")[0].replace(/-/g, "");
             }
 
             var startDate = formatDate(targetDate);
-            var endDate = formatDate(new Date(targetDate.getTime() + 86400000)); // Next day
+            var endDate = formatDate(new Date(targetDate.getTime() + 86400000));
 
             var calendarLink = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(selectedExercise)}&dates=${startDate}/${endDate}&details=Workout%20session&location=Gym&sf=true&output=xml`;
 
@@ -324,27 +324,12 @@ function drawStickFigureOnLoad() {
                 updateLevel(String(parseFloat(muscleInput.value)+.5), "abs");
             }
 
-            //var listId = `exercise-list-${day}`;
-                //var list = document.getElementById(listId);
-                // if (!list) {
-                //     list = document.createElement("ul");
-                //     list.id = listId;
-                //     var header = document.createElement("h3");
-                //     header.textContent = day;
-                //     header.className = "font-bold mt-3";
-                //     document.getElementById("exercise-schedule").appendChild(header);
-                //     document.getElementById("exercise-schedule").appendChild(list);
-                // }
-
-
-            
-
-                var selectedDay = document.getElementById("day").value;  // Get the selected day
-                var list = document.getElementById(selectedDay);  // Get the corresponding day list
+                var selectedDay = document.getElementById("day").value;
+                var list = document.getElementById(selectedDay);
 
                 if (!list) {
                     list = document.createElement("ul");
-                    list.id = selectedDay;  // Ensure the list has the correct day ID
+                    list.id = selectedDay;
                     document.getElementById("exercise-lists").appendChild(list);
                 }
 
