@@ -1,3 +1,6 @@
+<!-- Final Project CSEN174 - Gabe Bernini and Cole Propach -->
+
+<!-- Document Setup -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <script>
 
+//Defines Muscle Class
 class Muscle {
             constructor(trainingLevel, centerXOffset, yPosition, isFront, isBack, angle) {
                 this.trainingLevel = trainingLevel;
@@ -21,6 +25,8 @@ class Muscle {
                 throw new Error("draw must be implemented by subclasses");
             }
         }
+
+        //Defines drawing function for each muscle
 
         const muscleClasses = ['Triceps','Biceps', 'Forearms', 'Shoulders', 'Abs', 'Chest', 'Lats', 'Traps', 'Quads', 'Hamstrings', 'Calves'];
         muscleClasses.forEach(muscle => {
@@ -44,6 +50,8 @@ class Muscle {
             }
             window[muscle] = DynamicMuscle;
         });
+
+        //constants and positions for each muscle
             const musclePositions = {
             Biceps: { xOffset: 40, yPos: 110, front: true, back: false, angle: Math.PI/2},
             Triceps: { xOffset: 40, yPos: 130, front: true, back: false, angle: Math.PI/2},
@@ -59,7 +67,7 @@ class Muscle {
 };
 
 
-
+//Draw background stick figure
 function drawStickFigure(ctx, centerX) {
     let v = 30;
     ctx.strokeStyle = "black"; // Stick figure color
@@ -116,6 +124,7 @@ function drawStickFigure(ctx, centerX) {
 
 }
 
+//Creates canvas and draws stick figure with muscle overlay
 function drawCharacter() {
     const canvas = document.getElementById("simulationCanvas");
     const ctx = canvas.getContext("2d");
@@ -136,6 +145,8 @@ function drawCharacter() {
         }
     });
 }
+
+//increase a muslce's size when triggered by new exercise
 function updateLevel(lev, mus) {
     muscleClasses.forEach(muscle => {
         const muscleInput = document.getElementById(muscle.toLowerCase() + "Level");
@@ -147,7 +158,7 @@ function updateLevel(lev, mus) {
 }
 
 
-
+//have stick figure from website load
 function drawStickFigureOnLoad() {
     const frontCanvas = document.getElementById("simulationCanvas");
     if (frontCanvas) {
@@ -181,6 +192,7 @@ function drawStickFigureOnLoad() {
             });
         });
 
+        //gets occurence of next given day
         function getNextDayOfWeek(date, dayOfWeek) {
             var days = { "sunday": 0, "monday": 1, "tuesday": 2, "wednesday": 3, "thursday": 4, "friday": 5, "saturday": 6 };
             var resultDate = new Date(date);
@@ -204,6 +216,7 @@ function drawStickFigureOnLoad() {
         });
 
 
+        //adds exercise to given days schedule
         function addExercise(day) {
             var select = document.getElementById("exercise");
             var selectedExercise = select.options[select.selectedIndex].text;
@@ -222,6 +235,7 @@ function drawStickFigureOnLoad() {
             var calendarLink = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(selectedExercise)}&dates=${startDate}/${endDate}&details=Workout%20session&location=Gym&sf=true&output=xml`;
 
 
+            //defines muscle growth for each workout
             if(selectedExercise.toLowerCase() == "bench press"){
                 const muscleInput1 = document.getElementById("chest" + "Level");
                 updateLevel(String(parseFloat(muscleInput1.value)+.5), "chest");
@@ -326,6 +340,8 @@ function drawStickFigureOnLoad() {
                 updateLevel(String(parseFloat(muscleInput.value)+.5), "abs");
             }
 
+            //creates buttons and lists
+
                 var selectedDay = document.getElementById("day").value;
                 var list = document.getElementById(selectedDay);
 
@@ -388,6 +404,7 @@ function drawStickFigureOnLoad() {
 
 
     </script>
+<!-- defines website background and design -->
 </head>
 <body style="background-color: #2980b9; color: #ecf0f1;">
 <body class="bg-gray-100 min-h-screen p-6">
