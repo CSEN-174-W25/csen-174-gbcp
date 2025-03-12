@@ -335,41 +335,53 @@ function drawStickFigureOnLoad() {
 
             
 
-            var list = document.getElementById("exercise-list");
-            if (!list) {
-                list = document.createElement("ul");
-                list.id = "exercise-list";
-                document.getElementById("exercise-selector").appendChild(list);
-            }
+                var selectedDay = document.getElementById("day").value;  // Get the selected day
+                var list = document.getElementById(selectedDay);  // Get the corresponding day list
 
-            var listItem = document.createElement("li");
-            listItem.className = "flex justify-between items-center p-2 bg-white shadow rounded-md mb-2";
-            listItem.textContent = selectedExercise + " ";
+                if (!list) {
+                    list = document.createElement("ul");
+                    list.id = selectedDay;  // Ensure the list has the correct day ID
+                    document.getElementById("exercise-lists").appendChild(list);
+                }
 
-            var calendarButton = document.createElement("a");
-            calendarButton.href = calendarLink;
-            calendarButton.target = "_blank";
-            calendarButton.textContent = "📅 Add to Calendar";
-            calendarButton.className = "text-blue-500 hover:text-blue-700 ml-2";
+                var listItem = document.createElement("li");
+                listItem.className = "flex justify-between items-center p-2 bg-white shadow rounded-md mb-2";
+                listItem.textContent = selectedExercise + " ";
 
-            var removeButton = document.createElement("button");
-            removeButton.textContent = "Remove";
-            removeButton.className = "text-red-500 hover:text-red-700";
-            removeButton.onclick = function () {
-                listItem.remove();
-            };
+                var calendarButton = document.createElement("a");
+                calendarButton.href = calendarLink;
+                calendarButton.target = "_blank";
+                calendarButton.textContent = "📅 Add to Calendar";
+                calendarButton.className = "text-blue-500 hover:text-blue-700 ml-2";
 
-            listItem.appendChild(calendarButton);
-            listItem.appendChild(removeButton);
-            list.appendChild(listItem);
+                var removeButton = document.createElement("button");
+                removeButton.textContent = "Remove";
+                removeButton.className = "text-red-500 hover:text-red-700";
+                removeButton.onclick = function () {
+                    listItem.remove();
+                };
+
+                listItem.appendChild(calendarButton);
+                listItem.appendChild(removeButton);
+                list.appendChild(listItem);
+
         }
 
         function clearSchedule() {
-            var list = document.getElementById("exercise-list");
-            if (list) {
-                list.innerHTML = "";
-            }
-            
+            // Loop through all the days and remove all the added exercises
+            var days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+            days.forEach(function(day) {
+                var list = document.getElementById(day);
+                if (list) {
+                    // Remove each exercise list item
+                    var exercises = list.querySelectorAll("li");
+                    exercises.forEach(function(exercise) {
+                        exercise.remove();
+                    });
+                }
+            });
+
+            // Reset exercise levels
             updateLevel(1, "biceps");
             updateLevel(1, "triceps");
             updateLevel(1, "forearms");
@@ -381,8 +393,9 @@ function drawStickFigureOnLoad() {
             updateLevel(1, "quads");
             updateLevel(1, "hamstrings");
             updateLevel(1, "calves");
-            
         }
+
+
     </script>
 </head>
 <body class="bg-gray-100 min-h-screen p-6">
@@ -414,6 +427,15 @@ function drawStickFigureOnLoad() {
         <section id="exercise-selector" class="bg-white text-gray-900 p-6 shadow-xl rounded-lg transform hover:scale-105 transition">
             <h2 class="text-2xl font-semibold mb-4">Add Exercises</h2>
             <form class="flex mb-4 space-x-2">
+                <select id="day" name="day" class="p-2 border rounded-md">
+                    <option value="monday">Monday</option>
+                    <option value="tuesday">Tuesday</option>
+                    <option value="wednesday">Wednesday</option>
+                    <option value="thursday">Thursday</option>
+                    <option value="friday">Friday</option>
+                    <option value="saturday">Saturday</option>
+                    <option value="sunday">Sunday</option>
+                </select>
                 <select id="exercise" name="exercise" class="p-2 border rounded-md flex-grow">
                     <option value="bench_press">Bench Press</option>
                     <option value="squat">Squat</option>
@@ -439,7 +461,45 @@ function drawStickFigureOnLoad() {
             <button onclick="clearSchedule()" class="mt-4 w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition">
                 ❌ Clear Schedule
             </button>
-            <ul id="exercise-list"></ul>
+            
+            <div id="exercise-lists">
+                <h3 class="text-xl font-semibold mt-4">Workout Schedule</h3>
+                
+                <div id="monday" class="bg-white text-gray-900 p-4 shadow-xl rounded-lg mb-4 transform hover:scale-105 transition">
+                    <h4 class="font-semibold">Monday</h4>
+                    <ul></ul>
+                </div>
+
+                <div id="tuesday" class="bg-white text-gray-900 p-4 shadow-xl rounded-lg mb-4 transform hover:scale-105 transition">
+                    <h4 class="font-semibold">Tuesday</h4>
+                    <ul></ul>
+                </div>
+
+                <div id="wednesday" class="bg-white text-gray-900 p-4 shadow-xl rounded-lg mb-4 transform hover:scale-105 transition">
+                    <h4 class="font-semibold">Wednesday</h4>
+                    <ul></ul>
+                </div>
+
+                <div id="thursday" class="bg-white text-gray-900 p-4 shadow-xl rounded-lg mb-4 transform hover:scale-105 transition">
+                    <h4 class="font-semibold">Thursday</h4>
+                    <ul></ul>
+                </div>
+
+                <div id="friday" class="bg-white text-gray-900 p-4 shadow-xl rounded-lg mb-4 transform hover:scale-105 transition">
+                    <h4 class="font-semibold">Friday</h4>
+                    <ul></ul>
+                </div>
+
+                <div id="saturday" class="bg-white text-gray-900 p-4 shadow-xl rounded-lg mb-4 transform hover:scale-105 transition">
+                    <h4 class="font-semibold">Saturday</h4>
+                    <ul></ul>
+                </div>
+
+                <div id="sunday" class="bg-white text-gray-900 p-4 shadow-xl rounded-lg mb-4 transform hover:scale-105 transition">
+                    <h4 class="font-semibold">Sunday</h4>
+                    <ul></ul>
+                </div>
+            </div>
         </section>
 
     </div>
@@ -449,7 +509,6 @@ function drawStickFigureOnLoad() {
         <iframe src="https://calendar.google.com/calendar/embed?src=yourcalendarid&ctz=yourtimezone" style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
     </section>
     <section id="muscleInputs"></section>
-    
-
 </body>
+
 </html>
