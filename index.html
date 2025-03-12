@@ -182,14 +182,14 @@ function drawStickFigureOnLoad() {
         });
 
         function getNextDayOfWeek(date, dayOfWeek) {
-            var days = { "Sunday": 0, "Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6 };
+            var days = { "sunday": 0, "monday": 1, "tuesday": 2, "wednesday": 3, "thursday": 4, "friday": 5, "saturday": 6 };
             var resultDate = new Date(date);
             resultDate.setDate(date.getDate() + ((7 + days[dayOfWeek] - date.getDay()) % 7 || 7));
             return resultDate;
         }
 
         document.addEventListener("DOMContentLoaded", function () {
-            var days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+            var days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
             var container = document.getElementById("day-buttons");
 
             days.forEach(function (day) {
@@ -203,6 +203,7 @@ function drawStickFigureOnLoad() {
             });
         });
 
+
         function addExercise(day) {
             var select = document.getElementById("exercise");
             var selectedExercise = select.options[select.selectedIndex].text;
@@ -211,11 +212,12 @@ function drawStickFigureOnLoad() {
             var targetDate = getNextDayOfWeek(today, day);
 
             function formatDate(date) {
-                return date.toISOString().split("T")[0].replace(/-/g, "");
+                // Use local time and format as YYYYMMDD
+                return date.toLocaleDateString("en-CA").replace(/-/g, "");
             }
 
             var startDate = formatDate(targetDate);
-            var endDate = formatDate(new Date(targetDate.getTime() + 86400000));
+            var endDate = formatDate(new Date(targetDate.getTime() + 86400000)); // End date is 1 day ahead
 
             var calendarLink = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(selectedExercise)}&dates=${startDate}/${endDate}&details=Workout%20session&location=Gym&sf=true&output=xml`;
 
@@ -416,13 +418,13 @@ function drawStickFigureOnLoad() {
             <h2 class="text-2xl font-semibold mb-4">Add Exercises</h2>
             <form class="flex mb-4 space-x-2">
                 <select id="day" name="day" class="p-2 border rounded-md">
+                    <option value="sunday">Sunday</option>
                     <option value="monday">Monday</option>
                     <option value="tuesday">Tuesday</option>
                     <option value="wednesday">Wednesday</option>
                     <option value="thursday">Thursday</option>
                     <option value="friday">Friday</option>
                     <option value="saturday">Saturday</option>
-                    <option value="sunday">Sunday</option>
                 </select>
                 <select id="exercise" name="exercise" class="p-2 border rounded-md flex-grow">
                     <option value="bench_press">Bench Press</option>
@@ -442,7 +444,7 @@ function drawStickFigureOnLoad() {
                     <option value="lunges">Lunges</option>
                     <option value="planks">Planks</option>
                 </select>
-                <button type="button" onclick="addExercise()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                <button type="button" onclick="addExercise(document.getElementById('day').value)" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
                     + Add
                 </button>
             </form>
@@ -453,6 +455,11 @@ function drawStickFigureOnLoad() {
             <div id="exercise-lists">
                 <h3 class="text-xl font-semibold mt-4">Workout Schedule</h3>
                 
+                <div id="sunday" class="bg-white text-gray-900 p-4 shadow-xl rounded-lg mb-4 transform hover:scale-105 transition">
+                    <h4 class="font-semibold">Sunday</h4>
+                    <ul></ul>
+                </div>
+
                 <div id="monday" class="bg-white text-gray-900 p-4 shadow-xl rounded-lg mb-4 transform hover:scale-105 transition">
                     <h4 class="font-semibold">Monday</h4>
                     <ul></ul>
@@ -483,10 +490,7 @@ function drawStickFigureOnLoad() {
                     <ul></ul>
                 </div>
 
-                <div id="sunday" class="bg-white text-gray-900 p-4 shadow-xl rounded-lg mb-4 transform hover:scale-105 transition">
-                    <h4 class="font-semibold">Sunday</h4>
-                    <ul></ul>
-                </div>
+                
             </div>
         </section>
 
