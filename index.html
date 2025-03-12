@@ -177,9 +177,44 @@ function drawStickFigureOnLoad() {
             });
         });
 
-        function addExercise() {
+        function getNextDayOfWeek(date, dayOfWeek) {
+            var days = { "Sunday": 0, "Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6 };
+            var resultDate = new Date(date);
+            resultDate.setDate(date.getDate() + ((7 + days[dayOfWeek] - date.getDay()) % 7 || 7));
+            return resultDate;
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+            var container = document.getElementById("day-buttons");
+
+            days.forEach(function (day) {
+                var button = document.createElement("button");
+                button.textContent = day;
+                button.className = "bg-gray-200 text-black px-3 py-1 m-1 rounded hover:bg-gray-300";
+                button.onclick = function () {
+                    addExercise(day);
+                };
+                container.appendChild(button);
+            });
+        });
+
+        function addExercise(day) {
             var select = document.getElementById("exercise");
             var selectedExercise = select.options[select.selectedIndex].text;
+
+            var today = new Date();
+            var targetDate = getNextDayOfWeek(today, day);
+
+            function formatDate(date) {
+                return date.toISOString().split("T")[0].replace(/-/g, ""); // YYYYMMDD format
+            }
+
+            var startDate = formatDate(targetDate);
+            var endDate = formatDate(new Date(targetDate.getTime() + 86400000)); // Next day
+
+            var calendarLink = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(selectedExercise)}&dates=${startDate}/${endDate}&details=Workout%20session&location=Gym&sf=true&output=xml`;
+
 
             if(selectedExercise.toLowerCase() == "bench press"){
                 const muscleInput1 = document.getElementById("chest" + "Level");
@@ -285,6 +320,19 @@ function drawStickFigureOnLoad() {
                 updateLevel(String(parseFloat(muscleInput.value)+.5), "abs");
             }
 
+            //var listId = `exercise-list-${day}`;
+                //var list = document.getElementById(listId);
+                // if (!list) {
+                //     list = document.createElement("ul");
+                //     list.id = listId;
+                //     var header = document.createElement("h3");
+                //     header.textContent = day;
+                //     header.className = "font-bold mt-3";
+                //     document.getElementById("exercise-schedule").appendChild(header);
+                //     document.getElementById("exercise-schedule").appendChild(list);
+                // }
+
+
             
 
             var list = document.getElementById("exercise-list");
@@ -298,6 +346,12 @@ function drawStickFigureOnLoad() {
             listItem.className = "flex justify-between items-center p-2 bg-white shadow rounded-md mb-2";
             listItem.textContent = selectedExercise + " ";
 
+            var calendarButton = document.createElement("a");
+            calendarButton.href = calendarLink;
+            calendarButton.target = "_blank";
+            calendarButton.textContent = "📅 Add to Calendar";
+            calendarButton.className = "text-blue-500 hover:text-blue-700 ml-2";
+
             var removeButton = document.createElement("button");
             removeButton.textContent = "Remove";
             removeButton.className = "text-red-500 hover:text-red-700";
@@ -305,6 +359,7 @@ function drawStickFigureOnLoad() {
                 listItem.remove();
             };
 
+            listItem.appendChild(calendarButton);
             listItem.appendChild(removeButton);
             list.appendChild(listItem);
         }
