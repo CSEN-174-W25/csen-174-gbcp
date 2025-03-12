@@ -203,10 +203,6 @@ function drawStickFigureOnLoad() {
             if(selectedExercise.toLowerCase() == "deadlift"){
                 const muscleInput1 = document.getElementById("hamstrings" + "Level");
                 updateLevel(String(parseFloat(muscleInput1.value)+.5), "hamstrings");
-                const muscleInput2 = document.getElementById("glutes" + "Level");
-                updateLevel(String(parseFloat(muscleInput2.value)+.5), "glutes");
-                const muscleInput3 = document.getElementById("lower_back" + "Level");
-                updateLevel(String(parseFloat(muscleInput3.value)+.5), "lower_back");
                 const muscleInput4 = document.getElementById("lats" + "Level");
                 updateLevel(String(parseFloat(muscleInput4.value)+.2), "lats");
                 const muscleInput5 = document.getElementById("traps" + "Level");
@@ -216,8 +212,6 @@ function drawStickFigureOnLoad() {
             if(selectedExercise.toLowerCase() == "rdls"){
                 const muscleInput1 = document.getElementById("hamstrings" + "Level");
                 updateLevel(String(parseFloat(muscleInput1.value)+.5), "hamstrings");
-                const muscleInput2 = document.getElementById("glutes" + "Level");
-                updateLevel(String(parseFloat(muscleInput2.value)+.5), "glutes");
             }
 
             if(selectedExercise.toLowerCase() == "overhead press"){
@@ -284,8 +278,6 @@ function drawStickFigureOnLoad() {
                 updateLevel(String(parseFloat(muscleInput1.value)+.5), "quads");
                 const muscleInput2 = document.getElementById("hamstrings" + "Level");
                 updateLevel(String(parseFloat(muscleInput2.value)+.5), "hamstrings");
-                const muscleInput3 = document.getElementById("glutes" + "Level");
-                updateLevel(String(parseFloat(muscleInput3.value)+.5), "glutes");
             }
 
             if(selectedExercise.toLowerCase() == "planks"){
@@ -356,7 +348,6 @@ function drawStickFigureOnLoad() {
 <body>
     <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
 
-        <!-- Avatar Simulation -->
         <section class="bg-white text-gray-900 p-6 shadow-xl rounded-lg transform hover:scale-105 transition">
             <div>
                 <canvas id="simulationCanvas" width="400" height="400" style="border:1px solid black;"></canvas>
